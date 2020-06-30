@@ -2,13 +2,25 @@ version: "3"
 
 services:
   app:
-    image: platziapp
+    #image: platziapp
+    #--------------- uso de build----------------
+    #no quiero que construyas una imagen predefinida
+    #sino que bildees un contexto
+    build: .
     environment:
+      # agrale esta variable de entorno a los contenedores que
+      # corras apartir de aca.
       MONGO_URL: "mongodb://db:27017/test"
     depends_on:
+      # inicializa db antes que app
       - db
     ports:
-      - "3000:3000"
+      - "3000-3010:3000"
+    volumes: 
+      #con .:/usr/src va a pisar node_modules dentro del servicio        
+      - .:/usr/src
+      #esto no me lo toques read only /directorio
+      - /use/src/node_modules
 
   db:
     image: mongo
